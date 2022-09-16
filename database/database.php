@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 $dns = 'mysql:host=localhost;dbname=blog';
 $user = 'jonathan';
 $pwd = '432781';
