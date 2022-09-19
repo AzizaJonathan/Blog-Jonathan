@@ -13,8 +13,8 @@ $currentUser = $currentUser ?? false;
             <li>
                 <a href=" /auth-logout.php">Déconnexion</a>
             </li>
-            <li class=<?= $_SERVER['REQUEST_URI'] === '/profil.php' ? 'active' : '' ?>>
-                <a href=" /profil.php">Ma page</a>
+            <li class="<?= $_SERVER['REQUEST_URI'] === '/profile.php' ? 'active' : '' ?> header-profile">
+                <a href="/profile.php"><?= $currentUser['firstname'][0] . $currentUser['lastname'][0] ?></a>
             </li>
         <?php else : ?>
             <li class=<?= $_SERVER['REQUEST_URI'] === '/auth-article.php' ? 'active' : '' ?>>
