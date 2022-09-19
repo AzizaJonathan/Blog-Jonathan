@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
+<?php
+$pdo = require_once __DIR__ . '/database/database.php';
 
-<head>
-    <?php require_once 'includes/head.php' ?>
-    <link rel="stylesheet" href="/public/css/profile.css">
-    <title>LOGOUT</title>
-</head>
 
-<body>
-    <div class="container">
-        <?php require_once 'includes/header.php' ?>
-        <div class="content">
-            <h1>LOGOUT</h1>
-        </div>
-        <?php require_once 'includes/footer.php' ?>
-    </div>
-
-</body>
-
-</html>
+$sessionId = $_COOKIE['session'];
+if ($sessionId) {
+    $statement = $pdo->prepare('DELETE FROM session WHERE id=:id');
+    $statement->bindValue(':id', $sessionId);
+    $statement->execute();
+    setcookie('session', '', time() - 1);
+    header('Location: /auth-login.php');
+}

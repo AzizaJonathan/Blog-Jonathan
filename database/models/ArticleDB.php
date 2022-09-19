@@ -16,12 +16,14 @@ class ArticleDB
         title,
         category,
         content,
-        image
+        image,
+        author
       ) VALUES (
         :title,
         :category,
         :content,
-        :image
+        :image,
+        :author
       )
     ');
     $this->statementUpdateOne = $pdo->prepare('
@@ -30,11 +32,12 @@ class ArticleDB
         title=:title,
         category=:category,
         content=:content,
-        image=:image
+        image=:image,
+        author=:author
       WHERE id=:id
     ');
-    $this->statementReadOne = $pdo->prepare('SELECT * FROM article WHERE id=:id');
-    $this->statementReadAll = $pdo->prepare('SELECT * FROM article');
+    $this->statementReadOne = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id WHERE article.id=:id');
+    $this->statementReadAll = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author=user.id');
     $this->statementDeleteOne = $pdo->prepare('DELETE FROM article WHERE id=:id');
   }
 
@@ -65,6 +68,7 @@ class ArticleDB
     $this->statementCreateOne->bindValue(':content', $article['content']);
     $this->statementCreateOne->bindValue(':category', $article['category']);
     $this->statementCreateOne->bindValue(':image', $article['image']);
+    $this->statementCreateOne->bindValue(':author', $article['author']);
     $this->statementCreateOne->execute();
     return $this->fetchOne($this->pdo->lastInsertId());
   }
@@ -76,6 +80,7 @@ class ArticleDB
     $this->statementUpdateOne->bindValue(':category', $article['category']);
     $this->statementUpdateOne->bindValue(':image', $article['image']);
     $this->statementUpdateOne->bindValue(':id', $article['id']);
+    $this->statementUpdateOne->bindValue(':author', $article['author']);
     $this->statementUpdateOne->execute();
     return $article;
   }
