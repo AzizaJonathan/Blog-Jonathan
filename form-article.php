@@ -2,16 +2,15 @@
 require_once __DIR__ . '/database/database.php';
 $authDB = require_once __DIR__ . '/database/security.php';
 $currentUser = $authDB->isLoggedin();
-
 if (!$currentUser) {
     header('Location: /');
 }
+
 $articleDB = require_once __DIR__ . '/database/models/ArticleDB.php';
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_TITLE_TOO_SHORT = 'Le titre est trop court';
 const ERROR_CONTENT_TOO_SHORT = 'L\'article est trop court';
 const ERROR_IMAGE_URL = 'L\'image doit être une url valide';
-$filename = __DIR__ . '/data/articles.json';
 $errors = [
     'title' => '',
     'image' => '',
@@ -27,6 +26,7 @@ if ($id) {
     if ($article['author'] !== $currentUser['id']) {
         header('Location: /');
     }
+
     $title = $article['title'];
     $image = $article['image'];
     $category = $article['category'];
@@ -83,9 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $articleDB->createOne([
                 'title' => $title,
-                'content' => $title,
-                'category' => $title,
-                'image' => $title,
+                'content' => $content,
+                'category' => $category,
+                'image' => $image,
                 'author' => $currentUser['id']
             ]);
         }
@@ -95,12 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
+
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <?php require_once 'includes/head.php' ?>
-    <!--<link rel="stylesheet" href="/public/css/form-article.css">-->
+    <!-- <link rel="stylesheet" href="/public/css/form-article.css"> -->
     <title><?= $id ? 'Modifier' : 'Créer' ?> un article</title>
 </head>
 

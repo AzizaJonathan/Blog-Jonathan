@@ -9,35 +9,36 @@ class ArticleDB
   private PDOStatement $statementReadAll;
   private PDOStatement $statementReadUserAll;
 
+
   function __construct(private PDO $pdo)
   {
     $this->statementCreateOne = $pdo->prepare('
-      INSERT INTO article (
-        title,
-        category,
-        content,
-        image,
-        author
-      ) VALUES (
-        :title,
-        :category,
-        :content,
-        :image,
-        :author
-      )
-    ');
+            INSERT INTO article (
+                title,
+                category,
+                content,
+                image,
+                author
+            ) VALUES (
+                :title,
+                :category,
+                :content,
+                :image,
+                :author
+            )
+        ');
     $this->statementUpdateOne = $pdo->prepare('
-      UPDATE article
-      SET
-        title=:title,
-        category=:category,
-        content=:content,
-        image=:image,
-        author=:author
-      WHERE id=:id
-    ');
+            UPDATE article
+            SET
+                title=:title,
+                category=:category,
+                content=:content,
+                image=:image,
+                author=:author
+            WHERE id=:id
+        ');
     $this->statementReadOne = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id WHERE article.id=:id');
-    $this->statementReadAll = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author=user.id');
+    $this->statementReadAll = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id');
     $this->statementDeleteOne = $pdo->prepare('DELETE FROM article WHERE id=:id');
     $this->statementReadUserAll = $pdo->prepare('SELECT * FROM article WHERE author=:authorId');
   }
@@ -85,6 +86,7 @@ class ArticleDB
     $this->statementUpdateOne->execute();
     return $article;
   }
+
   public function fetchUserArticle(string $authorId): array
   {
     $this->statementReadUserAll->bindValue(':authorId', $authorId);
